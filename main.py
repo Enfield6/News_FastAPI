@@ -1,11 +1,13 @@
 from fastapi import FastAPI
-from routers import news
+from routers import news, users
 from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
 
 # 挂载路由
 app.include_router(news.router)
+app.include_router(users.router)
+
 
 app.add_middleware(
     CORSMiddleware,

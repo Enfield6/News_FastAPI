@@ -4,7 +4,7 @@ from fastapi.params import Query
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
 from config.db_conf import get_db
-from curd import news
+from crud import news
 router = APIRouter(prefix = "/api/news", tags= ["News"])
 
 @router.get("/categories")

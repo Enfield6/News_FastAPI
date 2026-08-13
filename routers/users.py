@@ -16,11 +16,13 @@ async def register(user_data: UserRequest, db: AsyncSession = Depends(get_db)):
     if existing_user:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username already exists")
     user = await users.create_user(db, user_data)
+    token = await users.create_token(db, user.id)
+
     return {
         "code": 200,
         "message": "register success",
         "data":{
-            "token": "wait",
+            "token": token,
             "user_info":{
                 "id": user.id,
                 "username": user.username,

@@ -57,3 +57,5 @@ async def get_related_news(db: AsyncSession, news_id: int, category_id: int, lim
         "categoryId": news_detail.category_id,
         "views": news_detail.views,
     } for news_detail in related_news ]
+
+

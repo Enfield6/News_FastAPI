@@ -5,6 +5,10 @@ from sqlalchemy import DateTime, Integer, String, Index, ForeignKey
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 class Base(DeclarativeBase):
+    pass
+
+
+class TimestampMixin:
     created_at: Mapped[datetime] = mapped_column(
         DateTime,
         default=datetime.now,
@@ -12,6 +16,7 @@ class Base(DeclarativeBase):
     )
     updated_at: Mapped[datetime] = mapped_column(
         DateTime,
+        default=datetime.now,
         onupdate=datetime.now,
         comment="update_time"
     )
@@ -19,7 +24,7 @@ class Base(DeclarativeBase):
 
 
 
-class Category(Base):
+class Category(TimestampMixin, Base):
     __tablename__ = "news_category"
     id: Mapped[int] = mapped_column(
         Integer,
@@ -39,7 +44,7 @@ class Category(Base):
         return f"Category(id={self.id!r}, name={self.name!r}, sort_order={self.sort_order!r})"
 
 
-class News(Base):
+class News(TimestampMixin, Base):
     __tablename__ = "news"
 
     # 创建索引： 提升查询速度

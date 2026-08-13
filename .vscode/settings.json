@@ -1,0 +1,8 @@
+{
+  "python.defaultInterpreterPath": "/Users/zsh/Path/VENV/bin/python",
+  "python.terminal.activateEnvironment": true,
+  "python-envs.terminal.autoActivationType": "command",
+  "python-envs.workspaceSearchPaths": [
+    "/Users/zsh/Path/VENV"
+  ]
+}

@@ -58,3 +58,5 @@ class UserToken(Base):
 
     def __repr__(self):
      return f"<UserToken(id={self.id}, user_id={self.user_id}, token='{self.token}')>"
+
+

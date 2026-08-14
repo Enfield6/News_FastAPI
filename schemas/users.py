@@ -43,3 +43,10 @@ class UserAuthResponse(BaseModel):
         from_attributes= True  # 允许从ORM对象中取值
     )
 
+
+class UserUpdateRequest(BaseModel):
+    nickname: str = Field(default=None)
+    avatar: str = Field(default=None)
+    gender: str = Field(default= None)
+    bio: str = Field(default= None)
+    phone: str = Field(default= None)

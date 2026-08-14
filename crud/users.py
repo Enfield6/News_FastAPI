@@ -1,10 +1,12 @@
 import uuid
 from datetime import timedelta, datetime
 
+from fastapi import HTTPException
 from sqlalchemy import select, func, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from schemas.users import UserRequest
+from schemas.users import UserRequest, UserUpdateRequest
+from utils import security
 from utils.security import get_hash_password
 from models.news import Category, News
 from models.users import User, UserToken
@@ -40,3 +42,39 @@ async def create_token(db: AsyncSession, user_id: int):
     await db.flush()
 
     return token
+
+
+async def authenticate_user(db: AsyncSession, username: str, password: str):
+    user = await get_user_by_username(db, username)
+    if not user:
+        return None
+    if not security.verify_password(password, user.password):
+        return None
+    return user
+
+async def get_user_by_token(db: AsyncSession, token: str):
+    query = select(UserToken).where(UserToken.token == token)
+    result = await db.execute(query)
+    db_token = result.scalar_one_or_none()
+
+    if not db_token or db_token.expires_at < datetime.now():
+        return None
+
+    query = select(User).where(User.id == db_token.user_id)
+    result = await db.execute(query)
+    return result.scalar_one_or_none()
+
+async def update_user(db: AsyncSession, username: str, user_data: UserUpdateRequest):
+
+    query = update(User).where(User.username == username).values(** user_data.model_dump(
+        exclude_unset= True,
+        exclude_none= True
+    ))
+    result = await db.execute(query)
+    await db.flush()
+
+    if  result.rowcount == 0:
+        raise HTTPException(status_code=404, detail= "用户不存在")
+
+    updated_user = await get_user_by_username(db, username)
+    return updated_user

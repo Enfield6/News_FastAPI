@@ -1,8 +1,13 @@
 from fastapi import FastAPI
 from routers import news, users
 from fastapi.middleware.cors import CORSMiddleware
+
+from utils.exception_handers import register_exception_handler
+
 app = FastAPI()
 
+# 注册异常处理器
+register_exception_handler(app)
 
 # 挂载路由
 app.include_router(news.router)

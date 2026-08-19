@@ -50,3 +50,8 @@ class UserUpdateRequest(BaseModel):
     gender: str = Field(default= None)
     bio: str = Field(default= None)
     phone: str = Field(default= None)
+
+
+class UserChangePasswordRequest(BaseModel):
+    old_password: str = Field(..., min_length=3, max_length=50, alias= "oldPassword", description="旧密码")
+    new_password: str = Field(..., min_length=3, max_length=50, alias= "newPassword", description="新密码")

@@ -78,3 +78,16 @@ async def update_user(db: AsyncSession, username: str, user_data: UserUpdateRequ
 
     updated_user = await get_user_by_username(db, username)
     return updated_user
+
+async def chang_password(db: AsyncSession, user: User, old_password: str, new_password: str):
+    if not security.verify_password(old_password, user.password):
+        return False
+
+    hashed_new_pwd = security.get_hash_password(new_password)
+    user.password = hashed_new_pwd
+    # 更新： 由SQLAlchemy真正接管这个User对象， 确保可以commit
+    db.add(user)
+    await db.commit()
+    await db.refresh(user)
+    return True
+

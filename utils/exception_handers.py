@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from fontTools.varLib.iup import Integral
+# from fontTools.varLib.iup import Integral
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
 from utils.exception import http_exception_handler, integrity_error_handler, sqlalchemy_error_handler, \
